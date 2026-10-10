@@ -1,0 +1,164 @@
+### ===== MiHotel — flujo de prueba completo =====
+### Ejecutar cada bloque con el icono ▶️ que aparece en IntelliJ (Ultimate)
+### IMPORTANTE: correr en orden; los > {% %} capturan variables de las respuestas
+
+### 1. Registro de cliente
+POST http://localhost:8080/api/auth/registro
+Content-Type: application/json
+
+{
+  "email": "cliente@test.com",
+  "password": "password123",
+  "nombre": "Juan",
+  "apellido": "Perez",
+  "telefono": "1234"
+}
+
+### 2. Registro de dueño de alojamiento
+POST http://localhost:8080/api/auth/registro-dueno
+Content-Type: application/json
+
+{
+  "email": "dueno@test.com",
+  "password": "password123",
+  "nombre": "Maria",
+  "apellido": "Lopez"
+}
+
+### 3. Login dueño (guarda token)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "dueno@test.com",
+  "password": "password123"
+}
+
+> {% client.global.set("tokenDueno", response.body.token); %}
+
+### 4. Login admin (guarda token)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@mihotel.com",
+  "password": "admin123"
+}
+
+> {% client.global.set("tokenAdmin", response.body.token); %}
+
+### 5. Crear alojamiento (dueno) → queda PENDIENTE
+POST http://localhost:8080/api/alojamientos
+Content-Type: application/json
+Authorization: Bearer {{tokenDueno}}
+
+{
+  "nombre": "Hotel Sol",
+  "tipo": "HOTEL",
+  "descripcion": "Hotel centrico con desayuno",
+  "direccion": "Av. Siempre Viva 123",
+  "ciudad": "Tandil",
+  "provincia": "Buenos Aires",
+  "telefono": "0249-444444",
+  "emailContacto": "info@hotelsol.com",
+  "servicioIds": [1, 3, 4]
+}
+
+> {% client.global.set("alojamientoId", response.body.id); %}
+
+### 6. Listado público (vacío hasta que el admin apruebe)
+GET http://localhost:8080/api/alojamientos
+
+### 7. Admin: ver pendientes
+GET http://localhost:8080/api/admin/alojamientos/pendientes
+Authorization: Bearer {{tokenAdmin}}
+
+### 8. Admin: aprobar alojamiento
+PATCH http://localhost:8080/api/admin/alojamientos/{{alojamientoId}}/aprobar
+Authorization: Bearer {{tokenAdmin}}
+
+### 9. Listado público (ahora aparece)
+GET http://localhost:8080/api/alojamientos
+
+### 9b. Filtro por ciudad
+GET http://localhost:8080/api/alojamientos?ciudad=tandil
+
+### 10. Mis alojamientos (dueno)
+GET http://localhost:8080/api/alojamientos/mios
+Authorization: Bearer {{tokenDueno}}
+
+### 11. Crear habitación
+POST http://localhost:8080/api/alojamientos/{{alojamientoId}}/habitaciones
+Content-Type: application/json
+Authorization: Bearer {{tokenDueno}}
+
+{
+  "nombre": "Doble estandar",
+  "descripcion": "Cama matrimonial, TV, baño privado",
+  "capacidad": 2,
+  "cantidad": 5,
+  "precioPorNoche": 45000
+}
+
+> {% client.global.set("habitacionId", response.body.id); %}
+
+### 12. Crear temporada (precio alto verano)
+POST http://localhost:8080/api/habitaciones/{{habitacionId}}/temporadas
+Content-Type: application/json
+Authorization: Bearer {{tokenDueno}}
+
+{
+  "nombre": "Alta verano",
+  "fechaInicio": "2026-12-20",
+  "fechaFin": "2027-03-01",
+  "precioPorNoche": 80000
+}
+
+### 13. Crear bloqueo (mantenimiento)
+POST http://localhost:8080/api/habitaciones/{{habitacionId}}/bloqueos
+Content-Type: application/json
+Authorization: Bearer {{tokenDueno}}
+
+{
+  "fechaInicio": "2026-11-15",
+  "fechaFin": "2026-11-20",
+  "motivo": "Mantenimiento"
+}
+
+### 14. Precio en temporada
+GET http://localhost:8080/api/habitaciones/{{habitacionId}}/precio?checkIn=2026-12-24&checkOut=2026-12-27
+
+### 15. Precio fuera de temporada
+GET http://localhost:8080/api/habitaciones/{{habitacionId}}/precio?checkIn=2026-10-15&checkOut=2026-10-17
+
+### 16. Disponibilidad libre
+GET http://localhost:8080/api/habitaciones/{{habitacionId}}/disponibilidad?checkIn=2026-10-15&checkOut=2026-10-17
+
+### 17. Disponibilidad bloqueada
+GET http://localhost:8080/api/habitaciones/{{habitacionId}}/disponibilidad?checkIn=2026-11-14&checkOut=2026-11-18
+
+### 18. Mi perfil
+GET http://localhost:8080/api/usuarios/me
+Authorization: Bearer {{tokenDueno}}
+
+### 19. Recuperar contraseña (devuelve tokenDev)
+POST http://localhost:8080/api/auth/recuperar
+Content-Type: application/json
+
+{
+  "email": "cliente@test.com"
+}
+
+> {% client.global.set("resetToken", response.body.tokenDev); %}
+
+### 20. Restablecer contraseña
+POST http://localhost:8080/api/auth/restablecer
+Content-Type: application/json
+
+{
+  "token": "{{resetToken}}",
+  "nuevaPassword": "nuevaPass123"
+}
+
+### 21. Catálogo de servicios
+GET http://localhost:8080/api/servicios

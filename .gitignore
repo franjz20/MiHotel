@@ -1,0 +1,31 @@
+# ---- Java / Maven ----
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+HELP.md
+
+# ---- Node / Next ----
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# ---- Entornos y secretos (NUNCA commitear) ----
+.env
+.env.*
+!.env.example
+application-local.properties
+
+# ---- SO / Editores ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# ---- Logs ----
+*.log
+
+DEPLOY.md

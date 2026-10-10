@@ -1,0 +1,34 @@
+name: Backup DB
+
+# Corre todos los dias a las 06:00 UTC (~03:00 Argentina) y guarda el dump
+# como artifact de GitHub durante 30 dias. Ejecutable manual con workflow_dispatch.
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instalar cliente PostgreSQL
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Dump de la base
+        env:
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: >
+          pg_dump
+          --host ${{ secrets.DB_HOST }}
+          --port 5432
+          --username ${{ secrets.DB_USERNAME }}
+          --dbname postgres
+          --format custom
+          --file mihotel-backup.dump
+
+      - name: Subir artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: db-backup-${{ github.run_id }}
+          path: mihotel-backup.dump
+          retention-days: 30
