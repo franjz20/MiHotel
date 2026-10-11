@@ -71,6 +71,24 @@ export default function Home() {
           <p className="text-gray-500">Todavía no hay alojamientos publicados.</p>
         )}
       </section>
+
+      <section className="bg-gray-900 text-white py-14 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-3">
+            ¿Tenés un hotel, hostel o cabaña?
+          </h2>
+          <p className="text-gray-300 mb-6">
+            Sumate a MiHotel: cargá tus habitaciones, manejá precios y
+            disponibilidad, y recibí reservas de huéspedes de todo el país.
+          </p>
+          <Link
+            href="/registro-dueno"
+            className="inline-block bg-white text-gray-900 px-6 py-3 rounded-md font-medium hover:bg-gray-100"
+          >
+            Publicar mi alojamiento
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

@@ -54,6 +54,12 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center gap-3">
+              <Link
+                href="/registro-dueno"
+                className="hover:text-blue-700 hidden sm:inline"
+              >
+                Publicá tu alojamiento
+              </Link>
               <Link href="/login" className="hover:text-blue-700">
                 Ingresar
               </Link>

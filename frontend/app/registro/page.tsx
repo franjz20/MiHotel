@@ -13,6 +13,12 @@ export default function RegistroPage() {
             Ingresá
           </Link>
         </p>
+        <p className="text-sm text-center mt-2 text-gray-600">
+          ¿Sos dueño o gerente de un alojamiento?{" "}
+          <Link href="/registro-dueno" className="text-blue-600 hover:underline">
+            Registrate acá
+          </Link>
+        </p>
       </div>
     </div>
   );
