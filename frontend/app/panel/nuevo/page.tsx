@@ -18,7 +18,7 @@ export default function NuevoAlojamientoPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow p-8">
+      <div className="card p-8">
         <h1 className="text-2xl font-bold mb-6">Nuevo alojamiento</h1>
         <FormAlojamiento onSubmit={crear} textoBoton="Crear alojamiento" />
         <p className="text-xs text-gray-500 mt-4">

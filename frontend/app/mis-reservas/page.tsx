@@ -52,20 +52,28 @@ export default function MisReservasPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Mis reservas</h1>
-      {error && <p className="text-red-600 mb-4">{error}</p>}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Mis reservas</h1>
+        <p className="text-gray-500 mt-1">Tus reservas y su estado actual.</p>
+      </div>
+      {error && (
+        <p className="bg-red-50 text-red-600 text-sm rounded-lg p-3 mb-4">{error}</p>
+      )}
       {reservas.length === 0 ? (
-        <p className="text-gray-500">
-          Todavía no hiciste reservas.{" "}
-          <Link href="/alojamientos" className="text-blue-600 hover:underline">
+        <div className="card p-12 text-center">
+          <svg className="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <p className="font-medium text-gray-700">Todavía no hiciste reservas</p>
+          <Link href="/alojamientos" className="btn-primary inline-block mt-4">
             Explorar alojamientos
           </Link>
-        </p>
+        </div>
       ) : (
         <div className="space-y-4">
           {reservas.map((r) => (
-            <div key={r.id} className="bg-white rounded-lg shadow p-5">
-              <div className="flex justify-between items-start">
+            <div key={r.id} className="card-hover p-5">
+              <div className="flex flex-wrap justify-between items-start gap-3">
                 <div>
                   <Link
                     href={`/alojamientos/${r.alojamientoId}`}
@@ -76,26 +84,27 @@ export default function MisReservasPage() {
                   <p className="text-sm text-gray-500">
                     {r.habitacionNombre} · {r.alojamientoCiudad}
                   </p>
-                  <p className="text-sm mt-1">
+                  <p className="text-sm mt-2 flex items-center gap-1.5 text-gray-700">
+                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
                     {r.checkIn} → {r.checkOut} · {r.cantidadUnidades} unidad
                     {r.cantidadUnidades > 1 ? "es" : ""}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 mt-1">
                     Huésped: {r.huespedNombre}
                   </p>
                   {r.motivoRechazo && (
-                    <p className="text-sm text-red-600 mt-1">
+                    <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-1.5 mt-2 inline-block">
                       Motivo: {r.motivoRechazo}
                     </p>
                   )}
                 </div>
                 <div className="text-right">
-                  <span
-                    className={`text-xs px-2 py-1 rounded ${ESTADO_STYLE[r.estado]}`}
-                  >
+                  <span className={`badge ${ESTADO_STYLE[r.estado]}`}>
                     {r.estado}
                   </span>
-                  <p className="font-bold mt-2">
+                  <p className="font-bold text-lg mt-2">
                     ${r.precioTotal.toLocaleString()}
                   </p>
                   {(r.estado === "PENDIENTE" || r.estado === "CONFIRMADA") && (
@@ -103,7 +112,7 @@ export default function MisReservasPage() {
                       onClick={() => cancelar(r.id)}
                       className="text-red-600 text-sm hover:underline mt-2"
                     >
-                      Cancelar
+                      Cancelar reserva
                     </button>
                   )}
                 </div>

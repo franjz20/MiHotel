@@ -29,49 +29,61 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-16 px-4">
-      <div className="bg-white rounded-lg shadow p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center">Iniciar sesión</h1>
+    <div className="max-w-md mx-auto mt-14 mb-16 px-4">
+      <div className="card p-8">
+        <div className="text-center mb-6">
+          <span className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600 text-white mb-3">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 21V8l9-6 9 6v13M3 21h18M9 21v-6h6v6" />
+            </svg>
+          </span>
+          <h1 className="text-2xl font-bold">Bienvenido de vuelta</h1>
+          <p className="text-sm text-gray-500 mt-1">Ingresá a tu cuenta de MiHotel</p>
+        </div>
         {error && (
-          <p className="bg-red-50 text-red-600 text-sm rounded p-3 mb-4">{error}</p>
+          <p className="bg-red-50 text-red-600 text-sm rounded-lg p-3 mb-4">{error}</p>
         )}
         <form onSubmit={onSubmit} className="space-y-4">
-          <input
-            type="email"
-            required
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border rounded-md px-3 py-2"
-          />
-          <input
-            type="password"
-            required
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border rounded-md px-3 py-2"
-          />
-          <button
-            type="submit"
-            disabled={cargando}
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
-          >
+          <div>
+            <label className="label">Email</label>
+            <input
+              type="email"
+              required
+              placeholder="tu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="input"
+            />
+          </div>
+          <div>
+            <label className="label">Contraseña</label>
+            <input
+              type="password"
+              required
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input"
+            />
+          </div>
+          <button type="submit" disabled={cargando} className="btn-primary w-full !py-2.5">
             {cargando ? "Ingresando..." : "Ingresar"}
           </button>
         </form>
-        <p className="text-sm text-center mt-4 text-gray-600">
-          ¿No tenés cuenta?{" "}
-          <Link href="/registro" className="text-blue-600 hover:underline">
-            Registrate
-          </Link>
-        </p>
-        <p className="text-sm text-center mt-2 text-gray-600">
-          ¿Tenés un alojamiento?{" "}
-          <Link href="/registro-dueno" className="text-blue-600 hover:underline">
-            Publicalo acá
-          </Link>
-        </p>
+        <div className="border-t border-gray-100 mt-6 pt-4 space-y-2 text-sm text-center text-gray-600">
+          <p>
+            ¿No tenés cuenta?{" "}
+            <Link href="/registro" className="text-blue-600 font-medium hover:underline">
+              Registrate
+            </Link>
+          </p>
+          <p>
+            ¿Tenés un alojamiento?{" "}
+            <Link href="/registro-dueno" className="text-blue-600 font-medium hover:underline">
+              Publicalo acá
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

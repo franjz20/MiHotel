@@ -91,8 +91,8 @@ export default function FormReserva({
   const total = precio ? precio.total * unidades : null;
 
   return (
-    <div className="max-w-lg mx-auto mt-10 px-4">
-      <div className="bg-white rounded-lg shadow p-8">
+    <div className="max-w-lg mx-auto mt-10 mb-16 px-4">
+      <div className="card p-8">
         <h1 className="text-2xl font-bold mb-1">Reservar</h1>
         {habitacion && (
           <p className="text-gray-500 mb-6">
@@ -100,94 +100,108 @@ export default function FormReserva({
           </p>
         )}
         {error && (
-          <p className="bg-red-50 text-red-600 text-sm rounded p-3 mb-4">{error}</p>
+          <p className="bg-red-50 text-red-600 text-sm rounded-lg p-3 mb-4">{error}</p>
         )}
 
         <form onSubmit={confirmar} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-gray-500">Check-in</label>
+              <label className="label">Check-in</label>
               <input
                 type="date"
                 required
                 value={checkIn}
                 onChange={(e) => setCheckIn(e.target.value)}
-                className="w-full border rounded-md px-3 py-2"
+                className="input"
               />
             </div>
             <div>
-              <label className="text-xs text-gray-500">Check-out</label>
+              <label className="label">Check-out</label>
               <input
                 type="date"
                 required
                 value={checkOut}
                 onChange={(e) => setCheckOut(e.target.value)}
-                className="w-full border rounded-md px-3 py-2"
+                className="input"
               />
             </div>
           </div>
 
           {disponibilidad && (
             <p
-              className={`text-sm rounded p-2 ${
+              className={`text-sm rounded-lg p-3 ${
                 disponibilidad.disponible
                   ? "bg-green-50 text-green-700"
                   : "bg-red-50 text-red-600"
               }`}
             >
               {disponibilidad.disponible
-                ? `${disponibilidad.unidadesLibres} unidades disponibles`
+                ? `✓ ${disponibilidad.unidadesLibres} unidades disponibles`
                 : "Sin disponibilidad en esas fechas"}
             </p>
           )}
           {precio && (
-            <p className="text-sm bg-blue-50 text-blue-700 rounded p-2">
-              Total estimado: <strong>${total?.toLocaleString()}</strong> (
-              {precio.noches.length} noches × {unidades} unidad
-              {unidades > 1 ? "es" : ""}) — se paga en el alojamiento
-            </p>
+            <div className="text-sm bg-blue-50 text-blue-800 rounded-lg p-3">
+              <p className="flex justify-between">
+                <span>
+                  {precio.noches.length} noches × {unidades} unidad
+                  {unidades > 1 ? "es" : ""}
+                </span>
+                <strong>${total?.toLocaleString()}</strong>
+              </p>
+              <p className="text-xs text-blue-600 mt-1">Se paga en el alojamiento</p>
+            </div>
           )}
 
           <div>
-            <label className="text-xs text-gray-500">Unidades</label>
+            <label className="label">Unidades</label>
             <input
               type="number"
               min={1}
               max={disponibilidad?.unidadesLibres ?? habitacion?.cantidad ?? 1}
               value={unidades}
               onChange={(e) => setUnidades(Number(e.target.value))}
-              className="w-full border rounded-md px-3 py-2"
+              className="input"
             />
           </div>
 
-          <h2 className="font-semibold pt-2">Datos del huésped</h2>
-          <input
-            required
-            placeholder="Nombre completo"
-            value={huesped.nombre}
-            onChange={(e) => setHuesped({ ...huesped, nombre: e.target.value })}
-            className="w-full border rounded-md px-3 py-2"
-          />
-          <input
-            required
-            placeholder="Teléfono"
-            value={huesped.telefono}
-            onChange={(e) => setHuesped({ ...huesped, telefono: e.target.value })}
-            className="w-full border rounded-md px-3 py-2"
-          />
-          <input
-            type="email"
-            required
-            placeholder="Email"
-            value={huesped.email}
-            onChange={(e) => setHuesped({ ...huesped, email: e.target.value })}
-            className="w-full border rounded-md px-3 py-2"
-          />
+          <h2 className="font-bold pt-2">Datos del huésped</h2>
+          <div>
+            <label className="label">Nombre completo</label>
+            <input
+              required
+              placeholder="Juan Pérez"
+              value={huesped.nombre}
+              onChange={(e) => setHuesped({ ...huesped, nombre: e.target.value })}
+              className="input"
+            />
+          </div>
+          <div>
+            <label className="label">Teléfono</label>
+            <input
+              required
+              placeholder="388 123-4567"
+              value={huesped.telefono}
+              onChange={(e) => setHuesped({ ...huesped, telefono: e.target.value })}
+              className="input"
+            />
+          </div>
+          <div>
+            <label className="label">Email</label>
+            <input
+              type="email"
+              required
+              placeholder="tu@email.com"
+              value={huesped.email}
+              onChange={(e) => setHuesped({ ...huesped, email: e.target.value })}
+              className="input"
+            />
+          </div>
 
           <button
             type="submit"
             disabled={cargando || !disponibilidad?.disponible}
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="btn-primary w-full !py-2.5"
           >
             {cargando ? "Reservando..." : "Confirmar reserva"}
           </button>

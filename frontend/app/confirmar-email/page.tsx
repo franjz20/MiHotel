@@ -27,11 +27,16 @@ function ConfirmarContenido() {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow p-8 text-center max-w-md mx-auto">
+    <div className="card p-10 text-center max-w-md mx-auto">
       {estado === "cargando" && <p className="text-gray-500">Confirmando...</p>}
       {estado === "ok" && (
         <>
-          <h1 className="text-xl font-bold text-green-700 mb-2">
+          <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-100 text-green-600 mb-4">
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">
             Email confirmado
           </h1>
           <p className="text-gray-600 mb-6">
@@ -41,14 +46,19 @@ function ConfirmarContenido() {
       )}
       {estado === "error" && (
         <>
-          <h1 className="text-xl font-bold text-red-600 mb-2">
+          <span className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-red-600 mb-4">
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </span>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">
             No se pudo confirmar
           </h1>
           <p className="text-gray-600 mb-6">{mensaje}</p>
         </>
       )}
       {estado !== "cargando" && (
-        <Link href="/" className="text-blue-600 hover:underline text-sm">
+        <Link href="/" className="btn-primary inline-block text-sm">
           Volver al inicio
         </Link>
       )}

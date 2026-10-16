@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { del, get, patch, post, put } from "@/lib/api";
@@ -82,28 +83,31 @@ export default function PanelAlojamiento({ id }: { id: number }) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-2">
-        <h1 className="text-2xl font-bold">{alojamiento.nombre}</h1>
-        <span className="text-xs bg-gray-100 px-3 py-1 rounded">
+      <Link href="/panel" className="text-sm text-gray-500 hover:text-blue-700 inline-flex items-center gap-1 mb-3">
+        ← Mis alojamientos
+      </Link>
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
+        <h1 className="text-3xl font-bold tracking-tight">{alojamiento.nombre}</h1>
+        <span className="badge bg-gray-100 text-gray-700">
           {alojamiento.estado}
         </span>
       </div>
+      <p className="text-sm text-gray-500 mb-6">
+        {alojamiento.ciudad}
+        {alojamiento.provincia ? `, ${alojamiento.provincia}` : ""} · {alojamiento.direccion}
+      </p>
       {alojamiento.motivoRechazo && (
-        <p className="bg-red-50 text-red-600 text-sm rounded p-3 mb-4">
+        <p className="bg-red-50 text-red-600 text-sm rounded-lg p-3 mb-4">
           Motivo del rechazo: {alojamiento.motivoRechazo}
         </p>
       )}
 
-      <div className="flex gap-1 border-b mb-6 overflow-x-auto">
+      <div className="tabs mb-6">
         {TABS.map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-4 py-2 text-sm whitespace-nowrap border-b-2 ${
-              tab === t
-                ? "border-blue-600 text-blue-700 font-medium"
-                : "border-transparent text-gray-500 hover:text-gray-800"
-            }`}
+            className={tab === t ? "tab-activo" : "tab"}
           >
             {TAB_LABEL[t]}
           </button>
@@ -130,11 +134,15 @@ function TabReservas({
   accion: (path: string, m?: "patch" | "delete", body?: unknown) => Promise<void>;
 }) {
   if (reservas.length === 0)
-    return <p className="text-gray-500">No hay reservas todavía.</p>;
+    return (
+      <div className="card p-8 text-center text-gray-500">
+        No hay reservas todavía. Cuando un huésped reserve, aparece acá.
+      </div>
+    );
   return (
     <div className="space-y-3">
       {reservas.map((r) => (
-        <div key={r.id} className="bg-white rounded-lg shadow p-4">
+        <div key={r.id} className="card p-4">
           <div className="flex flex-wrap justify-between gap-3">
             <div>
               <p className="font-medium">
@@ -148,7 +156,7 @@ function TabReservas({
               </p>
             </div>
             <div className="text-right">
-              <span className={`text-xs px-2 py-1 rounded ${ESTADO_RES[r.estado]}`}>
+              <span className={`badge ${ESTADO_RES[r.estado]}`}>
                 {r.estado}
               </span>
               <p className="font-bold mt-1">${r.precioTotal.toLocaleString()}</p>
@@ -159,7 +167,7 @@ function TabReservas({
               <>
                 <button
                   onClick={() => accion(`/reservas/${r.id}/confirmar`)}
-                  className="text-xs bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700"
+                  className="btn btn-sm bg-green-600 text-white hover:bg-green-700"
                 >
                   Confirmar
                 </button>
@@ -169,7 +177,7 @@ function TabReservas({
                     if (motivo !== null)
                       accion(`/reservas/${r.id}/rechazar`, "patch", { motivo });
                   }}
-                  className="text-xs bg-red-600 text-white px-3 py-1.5 rounded hover:bg-red-700"
+                  className="btn-danger btn-sm"
                 >
                   Rechazar
                 </button>
@@ -178,7 +186,7 @@ function TabReservas({
             {r.estado === "CONFIRMADA" && (
               <button
                 onClick={() => accion(`/reservas/${r.id}/completar`)}
-                className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700"
+                className="btn-primary btn-sm"
               >
                 Marcar completada
               </button>
@@ -226,19 +234,19 @@ function TabHabitaciones({
     }
   }
 
-  const input = "border rounded-md px-3 py-1.5 text-sm";
+  const input = "input";
 
   return (
     <div className="space-y-4">
       <button
         onClick={() => setMostrarForm(!mostrarForm)}
-        className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700"
+        className="btn-primary"
       >
         {mostrarForm ? "Cancelar" : "+ Nueva habitación"}
       </button>
 
       {mostrarForm && (
-        <form onSubmit={crear} className="bg-white rounded-lg shadow p-4 grid grid-cols-2 gap-3">
+        <form onSubmit={crear} className="card p-5 grid grid-cols-2 gap-3">
           {error && <p className="col-span-2 text-red-600 text-sm">{error}</p>}
           <input required placeholder="Nombre *" value={form.nombre}
             onChange={(e) => setForm({ ...form, nombre: e.target.value })} className={input} />
@@ -255,7 +263,7 @@ function TabHabitaciones({
               value={form.cantidad}
               onChange={(e) => setForm({ ...form, cantidad: Number(e.target.value) })} className={input} />
           </div>
-          <button className="col-span-2 bg-blue-600 text-white py-1.5 rounded hover:bg-blue-700 text-sm">
+          <button className="col-span-2 btn-primary !py-2 text-sm">
             Crear habitación
           </button>
         </form>
@@ -265,7 +273,9 @@ function TabHabitaciones({
         <HabitacionPanel key={h.id} h={h} accion={accion} recargar={recargar} />
       ))}
       {habitaciones.length === 0 && !mostrarForm && (
-        <p className="text-gray-500">Sin habitaciones cargadas.</p>
+        <div className="card p-8 text-center text-gray-500">
+          Sin habitaciones cargadas — agregá la primera con el botón de arriba.
+        </div>
       )}
     </div>
   );
@@ -297,10 +307,10 @@ function HabitacionPanel({
     e.target.value = "";
   }
 
-  const input = "border rounded px-2 py-1 text-xs";
+  const input = "input-sm !w-auto";
 
   return (
-    <div className="bg-white rounded-lg shadow p-4">
+    <div className="card p-5">
       <div className="flex justify-between items-start">
         <div>
           <p className="font-medium">
@@ -348,7 +358,7 @@ function HabitacionPanel({
                 precioPorNoche: Number(temp.precioPorNoche),
               }).then(recargar).catch((e) => alert(e.message))
             }
-            className="text-xs bg-gray-700 text-white px-2 py-1 rounded"
+            className="btn btn-sm bg-gray-700 text-white hover:bg-gray-800"
           >
             + Temporada
           </button>
@@ -379,7 +389,7 @@ function HabitacionPanel({
               post(`/habitaciones/${h.id}/bloqueos`, bloq)
                 .then(recargar).catch((e) => alert(e.message))
             }
-            className="text-xs bg-gray-700 text-white px-2 py-1 rounded"
+            className="btn btn-sm bg-gray-700 text-white hover:bg-gray-800"
           >
             + Bloqueo
           </button>
@@ -445,13 +455,13 @@ function TabInfo({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <p className="text-xs text-yellow-700 bg-yellow-50 rounded p-2 mb-4">
+    <div className="card p-6">
+      <p className="text-xs text-yellow-700 bg-yellow-50 rounded-lg p-3 mb-4">
         Al editar, el alojamiento vuelve a estado PENDIENTE y un administrador
         debe aprobarlo de nuevo.
       </p>
       {guardado && (
-        <p className="text-sm bg-green-50 text-green-700 rounded p-2 mb-4">
+        <p className="text-sm bg-green-50 text-green-700 rounded-lg p-3 mb-4">
           Cambios guardados.
         </p>
       )}
@@ -486,7 +496,7 @@ function TabFotos({
 
   return (
     <div>
-      <label className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md text-sm cursor-pointer hover:bg-blue-700">
+      <label className="btn-primary cursor-pointer">
         + Subir foto
         <input type="file" accept="image/*" className="hidden" onChange={subir} />
       </label>
@@ -529,7 +539,7 @@ function TabStats({ stats }: { stats: Estadisticas }) {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
       {cards.map((c) => (
-        <div key={c.label} className="bg-white rounded-lg shadow p-5 text-center">
+        <div key={c.label} className="card p-5 text-center">
           <p className="text-2xl font-bold text-blue-700">{c.valor}</p>
           <p className="text-xs text-gray-500 mt-1">{c.label}</p>
         </div>

@@ -58,7 +58,7 @@ function Badge({ texto }: { texto: string }) {
 
 function Card({ label, valor }: { label: string; valor: string | number }) {
   return (
-    <div className="bg-white rounded-lg shadow p-4">
+    <div className="card p-4">
       <p className="text-xs text-gray-500">{label}</p>
       <p className="text-2xl font-bold mt-1">{valor}</p>
     </div>
@@ -151,18 +151,17 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Panel de administración</h1>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Panel de administración</h1>
+        <p className="text-gray-500 mt-1">Gestión completa de la plataforma.</p>
+      </div>
 
-      <div className="flex gap-1 mb-6 border-b">
+      <div className="tabs mb-6">
         {TABS.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`px-4 py-2 text-sm font-medium rounded-t-lg ${
-              tab === t.id
-                ? "bg-white border border-b-0 border-gray-200 text-blue-700 -mb-px"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={tab === t.id ? "tab-activo" : "tab"}
           >
             {t.label}
           </button>
@@ -204,7 +203,7 @@ export default function AdminPage() {
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-lg shadow p-5">
+                <div className="card p-5">
                   <h2 className="font-semibold mb-3">Reservas por estado</h2>
                   {Object.entries(stats.reservasPorEstado).map(([k, v]) => (
                     <div
@@ -216,7 +215,7 @@ export default function AdminPage() {
                     </div>
                   ))}
                 </div>
-                <div className="bg-white rounded-lg shadow p-5">
+                <div className="card p-5">
                   <h2 className="font-semibold mb-3">Alojamientos por estado</h2>
                   {Object.entries(stats.alojamientosPorEstado).map(([k, v]) => (
                     <div
@@ -234,7 +233,7 @@ export default function AdminPage() {
 
           {reportes && (
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg shadow p-5">
+              <div className="card p-5">
                 <h2 className="font-semibold mb-3">Reservas por mes</h2>
                 {reportes.reservasPorMes.length === 0 ? (
                   <p className="text-sm text-gray-500">Sin datos.</p>
@@ -258,7 +257,7 @@ export default function AdminPage() {
                   </span>
                 </div>
               </div>
-              <div className="bg-white rounded-lg shadow p-5">
+              <div className="card p-5">
                 <h2 className="font-semibold mb-3">Top alojamientos</h2>
                 {reportes.topAlojamientos.length === 0 ? (
                   <p className="text-sm text-gray-500">Sin datos.</p>
@@ -301,7 +300,7 @@ export default function AdminPage() {
                 {pendientes.map((a) => (
                   <div
                     key={a.id}
-                    className="bg-white rounded-lg shadow p-4 flex justify-between items-center"
+                    className="card p-4 flex justify-between items-center"
                   >
                     <div>
                       <p className="font-medium">{a.nombre}</p>
@@ -335,7 +334,7 @@ export default function AdminPage() {
             <h2 className="font-semibold mb-3">
               Todos los alojamientos ({alojamientos.length})
             </h2>
-            <div className="bg-white rounded-lg shadow divide-y">
+            <div className="card divide-y">
               {alojamientos.map((a) => (
                 <div
                   key={a.id}
@@ -404,7 +403,7 @@ export default function AdminPage() {
             </button>
           </div>
 
-          <div className="bg-white rounded-lg shadow overflow-x-auto">
+          <div className="card overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500 border-b">
@@ -500,7 +499,7 @@ export default function AdminPage() {
             ))}
           </div>
 
-          <div className="bg-white rounded-lg shadow divide-y">
+          <div className="card divide-y">
             {reservas.length === 0 && (
               <p className="p-4 text-sm text-gray-500">Sin reservas.</p>
             )}
@@ -542,7 +541,7 @@ export default function AdminPage() {
 
       {/* ---- AUDITORIA ---- */}
       {tab === "auditoria" && (
-        <div className="bg-white rounded-lg shadow divide-y">
+        <div className="card divide-y">
           {auditoria.length === 0 && (
             <p className="p-4 text-sm text-gray-500">Sin registros.</p>
           )}

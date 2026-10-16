@@ -3,22 +3,29 @@ import FormRegistro from "@/components/FormRegistro";
 
 export default function RegistroPage() {
   return (
-    <div className="max-w-md mx-auto mt-16 px-4">
-      <div className="bg-white rounded-lg shadow p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center">Crear cuenta</h1>
+    <div className="max-w-md mx-auto mt-14 mb-16 px-4">
+      <div className="card p-8">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold">Creá tu cuenta</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Reservá alojamientos en Jujuy y Salta
+          </p>
+        </div>
         <FormRegistro endpoint="/auth/registro" />
-        <p className="text-sm text-center mt-4 text-gray-600">
-          ¿Ya tenés cuenta?{" "}
-          <Link href="/login" className="text-blue-600 hover:underline">
-            Ingresá
-          </Link>
-        </p>
-        <p className="text-sm text-center mt-2 text-gray-600">
-          ¿Sos dueño o gerente de un alojamiento?{" "}
-          <Link href="/registro-dueno" className="text-blue-600 hover:underline">
-            Registrate acá
-          </Link>
-        </p>
+        <div className="border-t border-gray-100 mt-6 pt-4 space-y-2 text-sm text-center text-gray-600">
+          <p>
+            ¿Ya tenés cuenta?{" "}
+            <Link href="/login" className="text-blue-600 font-medium hover:underline">
+              Ingresá
+            </Link>
+          </p>
+          <p>
+            ¿Sos dueño o gerente de un alojamiento?{" "}
+            <Link href="/registro-dueno" className="text-blue-600 font-medium hover:underline">
+              Registrate acá
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

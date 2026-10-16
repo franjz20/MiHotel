@@ -31,21 +31,26 @@ export default function NotificacionesPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Notificaciones</h1>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Notificaciones</h1>
+          <p className="text-gray-500 mt-1">Avisos sobre tu cuenta y reservas.</p>
+        </div>
         {notificaciones.some((n) => !n.leida) && (
-          <button
-            onClick={leerTodas}
-            className="text-sm text-blue-600 hover:underline"
-          >
+          <button onClick={leerTodas} className="btn-secondary btn-sm !text-xs">
             Marcar todas leídas
           </button>
         )}
       </div>
       {notificaciones.length === 0 ? (
-        <p className="text-gray-500">No tenés notificaciones todavía.</p>
+        <div className="card p-12 text-center">
+          <svg className="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <p className="text-gray-600 font-medium">No tenés notificaciones todavía</p>
+        </div>
       ) : (
-        <div className="bg-white rounded-lg shadow divide-y">
+        <div className="card divide-y divide-gray-100">
           {notificaciones.map((n) => (
             <div key={n.id} className={`p-4 ${n.leida ? "opacity-60" : ""}`}>
               <p className="font-medium text-sm flex items-center gap-2">

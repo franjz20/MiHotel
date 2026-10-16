@@ -94,12 +94,12 @@ export default function FormAlojamiento({
     }
   }
 
-  const input = "w-full border rounded-md px-3 py-2";
+  const input = "input";
 
   return (
     <form onSubmit={submit} className="space-y-4">
       {error && (
-        <p className="bg-red-50 text-red-600 text-sm rounded p-3">{error}</p>
+        <p className="bg-red-50 text-red-600 text-sm rounded-lg p-3">{error}</p>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -172,8 +172,7 @@ export default function FormAlojamiento({
         </div>
       )}
 
-      <button type="submit" disabled={cargando}
-        className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50">
+      <button type="submit" disabled={cargando} className="btn-primary !px-6">
         {cargando ? "Guardando..." : textoBoton}
       </button>
     </form>
